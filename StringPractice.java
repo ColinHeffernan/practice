@@ -1,4 +1,5 @@
 import java.util.ArrayDeque;
+import java.util.Arrays;
 
 /**
  * StringPractice - A class to practice manipulating strings
@@ -13,7 +14,11 @@ public class StringPractice {
 	 */
 	public static String[] generateWords(int maxLength) {
 		ArrayDeque<String> wordsToAppend = new ArrayDeque<String>();
-		String[] words = new String[(int) Math.pow(26, maxLength)];
+		int arraySize = 0;
+		for(int i = 0; i <= maxLength; i++){
+			arraySize += (int) Math.pow(26, i); // need to hold words of length up to maxLength
+		}
+		String[] words = new String[arraySize - 1];
 		int index = 0;
 		int numA = (int) ('A');
 		String wordToAdd;
@@ -22,7 +27,6 @@ public class StringPractice {
 			wordToAdd = Character.toString((char) (numA + i));
 			wordsToAppend.add(wordToAdd);
 			words[index++] = wordToAdd;
-			System.out.println(wordToAdd);
 			wordToAdd = "";
 		}
 		if (maxLength == 1) {
@@ -42,7 +46,6 @@ public class StringPractice {
 													// queue
 				}
 				words[index++] = wordToAdd;
-				System.out.println(wordToAdd);
 			}
 		}
 		return words;
@@ -170,6 +173,10 @@ public class StringPractice {
 		System.out.println(isPalindrome(palindrome));
 		String backwards = "!sdrawkcab saw gnirts sihT";
 		System.out.println(reverse(backwards));
+		String [] words = generateWords(3);
+		for (String word: words){
+			System.out.println(word);
+		}
 		System.out.println(anaPal("a** l323  amd  dl"));
 	}
 
