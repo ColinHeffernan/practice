@@ -7,38 +7,38 @@ public class MathPractice {
 	/**
 	 * karatsuba - performs karatsuba multiplication on the specified numbers using the specified base
 	 * 	See http://en.wikipedia.org/wiki/Karatsuba_algorithm for the details of the algorithm
-	 * Special Considerations: This currently only works for non-negative integers
-	 * @return the produce of the two numbers
+	 * @return the product of the two numbers
 	 */
 	public static int karatsuba(int base, int a, int b){
-		/* handle trivial cases separately */
-		if(a == 0 || b== 0){
-			return 0;
+		/* set x and y to the absolute values of a and b respectively */
+		int x = (a < 0) ? (0 - a): a;
+		int y = (b < 0) ? (0 - b): b;
+		/* small cases must be multiplied directly */
+		if(x < Math.pow(base,2) || y < Math.pow(base,  2)){
+			return a * b;
 		}
-		if (a == 1){
-			return b;
-		}
-		else if (b == 1){
-			return a;
-		}
+		boolean negative = (a < 0) ^ (b < 0); // XOR operator determines sign of the product
+		
 		int m = 0;
 		int baseToM = (int) Math.pow(base, m);
-		while(baseToM < a && baseToM < b){
+		/* determine the exponent of the base to be used */
+		while(baseToM <= x && baseToM <= y){
 			baseToM = (int) Math.pow(base, ++m);
 		}
 		baseToM = (int) Math.pow(base, --m);
-		int a0 = a % baseToM;
-		int b0 = b % baseToM;
-		int a1 = a / baseToM;
-		int b1 = b / baseToM;
-		int z0 = a0 * b0;
-		int z2 = a1*b1;
-		int z1 = (a1 + a0)*(b1 + b0) - z2 - z0;
-		return z2 * (int)Math.pow(baseToM, 2) + z1 * baseToM + z0;
+		int x0 = x % baseToM;
+		int y0 = y % baseToM;
+		int x1 = x / baseToM;
+		int y1 = y / baseToM;
+		int z0 = karatsuba(base, x0, y0);
+		int z2 = karatsuba(base, x1, y1);
+		int z1 = karatsuba(base, (x1 + x0), (y1 + y0)) - z2 - z0;
+		int abs = karatsuba(base, z2, (int) Math.pow(baseToM, 2)) + karatsuba(base, z1,  baseToM) + z0;
+		return negative ? 0 - abs: abs;
 	}
 	
 	public static void main(String [] args){
-		int x = 5321, y = 438;
+		int x = 3532, y = -35;
 		System.out.println(karatsuba(10, x, y));
 	}
 }
