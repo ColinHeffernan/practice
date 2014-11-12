@@ -12,43 +12,30 @@ import java.util.Iterator;
 public class StringPractice {
 
 	/**
-	 * generateWords - returns an array with all possible strings containing A-Z
+	 * generateWords - returns an collection with all possible strings containing A-Z
 	 * characters up to a specified length
+	 * this is very similar to getPossibleWords but with a set alphabet and the collection
+	 *  contains all strings up to maxLength, not just of one length
+	 * @param maxLength
+	 * @return the collection of the strings
 	 */
-	public static String[] generateWords(int maxLength) {
-		ArrayDeque<String> wordsToAppend = new ArrayDeque<String>();
-		int arraySize = 0;
-		for(int i = 0; i <= maxLength; i++){
-			arraySize += (int) Math.pow(26, i); // need to hold words of length up to maxLength
+	public static Collection<String> generateWords(int maxLength) {
+		Collection<String> words = new ArrayList<String>();
+		if (maxLength == 1){
+			for(int i = 0; i < 26; i++){
+				words.add(Character.toString((char) ((int) 'A' + i)));
+			}
 		}
-		String[] words = new String[arraySize - 1];
-		int index = 0;
-		int numA = (int) ('A');
-		String wordToAdd;
-		/* Initialize the stack with all one-letter words */
-		for (int i = 0; i < 26; i++) {
-			wordToAdd = Character.toString((char) (numA + i));
-			wordsToAppend.add(wordToAdd);
-			words[index++] = wordToAdd;
-			wordToAdd = "";
-		}
-		if (maxLength == 1) {
-			return words;
-		}
-		String currentWord;
-		while (!wordsToAppend.isEmpty()) { // until we have done every word of
-											// the specified length
-			currentWord = wordsToAppend.remove(); // remove word from the end of
-													// the queue to append
-													// letters to it
-			for (int i = 0; i < 26; i++) {
-				wordToAdd = currentWord + (char) (numA + i);
-				if (wordToAdd.length() < maxLength) { // only add word if it is
-														// 1 char short of max
-					wordsToAppend.add(wordToAdd); // add word to the end of the
-													// queue
+		else if (maxLength > 1){
+			Collection<String> prev = generateWords(maxLength - 1);
+			Iterator<String> iter = prev.iterator();
+			String current;
+			words.addAll(prev);
+			while(iter.hasNext()){
+				current = iter.next();
+				for(int i = 0; i < 26; i ++){
+					words.add(current + (char) ((int) 'A' + i));
 				}
-				words[index++] = wordToAdd;
 			}
 		}
 		return words;
@@ -204,5 +191,4 @@ public class StringPractice {
 		 */
 		return (oddCount <= 1);
 	}
-
 }
