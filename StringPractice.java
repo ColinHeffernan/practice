@@ -1,5 +1,8 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * StringPractice - A class to practice manipulating strings
@@ -52,6 +55,35 @@ public class StringPractice {
 	}
 
 	/**
+	 * getPossibleWords - creates a collection of all possible words of a specified length 
+	 * 	with characters from the specified alphabet
+	 * @param length, alphabet
+	 * @return
+	 */
+	public static Collection<String> getPossibleWords(int length, char [] alphabet){
+		/* empty collection will be returned with erroneous input of length < 1 */
+		Collection<String> words = new ArrayList<String>();
+		if (length == 1){ /* base case */
+			for (char c: alphabet){
+				words.add(Character.toString(c));
+			}
+		}
+		else if (length > 1){
+			Collection<String> shorter = getPossibleWords(length - 1, alphabet);
+			Iterator<String> iter = shorter.iterator();
+			String current;
+			while(iter.hasNext()){
+				current = iter.next();
+				for(char c: alphabet){
+					words.add(current + c);
+				}
+			}
+		}
+		return words;
+	}
+	
+	
+	/**
 	 * reverse - Returns the reverse of a given string
 	 */
 	public static String reverse(String in) {
@@ -63,6 +95,16 @@ public class StringPractice {
 		return rev;
 	}
 
+	public static String reverseSentence(String sentence){
+		String rev = "";
+	    String [] words = sentence.split(" ");
+	    System.out.println(Arrays.toString(words));
+	    for (int i = words.length - 1; i > 0; i--){
+	    	rev += words[i] + " ";
+	    }
+	    rev += words[0];
+	    return rev;
+	}
 	/**
 	 * maxPrefix - finds the longest common prefix of an array strings
 	 */
@@ -161,23 +203,6 @@ public class StringPractice {
 		 * times
 		 */
 		return (oddCount <= 1);
-	}
-
-	/**
-	 * main - test the above methods and print results
-	 */
-	public static void main(String[] args) {
-		String[] prefixWords = { "Charlie", "Chart", "Challenge", "Chat" };
-		System.out.println(maxPrefix(prefixWords)); // should print "Cha"
-		String palindrome = "a man a plan a canal panama"; // should print true
-		System.out.println(isPalindrome(palindrome));
-		String backwards = "!sdrawkcab saw gnirts sihT";
-		System.out.println(reverse(backwards));
-		String [] words = generateWords(3);
-		for (String word: words){
-			System.out.println(word);
-		}
-		System.out.println(anaPal("a** l323  amd  dl"));
 	}
 
 }
